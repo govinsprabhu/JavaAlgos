@@ -37,11 +37,11 @@ public class SingleLinkedList {
     }
 
     public static SingleLinkedList getOddLinkedList(){
-        SingleLinkedList singleLinkedList1 = new SingleLinkedList(11);
-        SingleLinkedList singleLinkedList2 = new SingleLinkedList(3);
-        SingleLinkedList singleLinkedList3 = new SingleLinkedList(4);
+        SingleLinkedList singleLinkedList1 = new SingleLinkedList(1);
+        SingleLinkedList singleLinkedList2 = new SingleLinkedList(2);
+        SingleLinkedList singleLinkedList3 = new SingleLinkedList(3);
         SingleLinkedList singleLinkedList4 = new SingleLinkedList(5);
-        SingleLinkedList singleLinkedList5 = new SingleLinkedList(6);
+        SingleLinkedList singleLinkedList5 = new SingleLinkedList(7);
         //SingleLinkedList linkedList6 = new SingleLinkedList(1);
         singleLinkedList1.setSingleLinkedList(singleLinkedList2);
         singleLinkedList2.setSingleLinkedList(singleLinkedList3);
@@ -52,8 +52,8 @@ public class SingleLinkedList {
     }
 
     public static SingleLinkedList getEvenLinkedList(){
-        SingleLinkedList singleLinkedList1 = new SingleLinkedList(16);
-        SingleLinkedList singleLinkedList2 = new SingleLinkedList(21);
+        SingleLinkedList singleLinkedList1 = new SingleLinkedList(1);
+        SingleLinkedList singleLinkedList2 = new SingleLinkedList(2);
         SingleLinkedList singleLinkedList3 = new SingleLinkedList(3);
         SingleLinkedList singleLinkedList4 = new SingleLinkedList(4);
         SingleLinkedList singleLinkedList5 = new SingleLinkedList(5);
@@ -62,14 +62,15 @@ public class SingleLinkedList {
         singleLinkedList2.setSingleLinkedList(singleLinkedList3);
         singleLinkedList3.setSingleLinkedList(singleLinkedList4);
         singleLinkedList4.setSingleLinkedList(singleLinkedList5);
-        singleLinkedList5.setSingleLinkedList(singleLinkedList6);
+        //singleLinkedList5.setSingleLinkedList(singleLinkedList6);
         return singleLinkedList1;
     }
     public static void print(SingleLinkedList singleLinkedList){
         while (singleLinkedList  != null){
-            System.out.println(singleLinkedList.getData());
+            System.out.print(singleLinkedList.getData() + " -> ");
             singleLinkedList = singleLinkedList.getSingleLinkedList();
         }
+        System.out.println();
     }
 
 }

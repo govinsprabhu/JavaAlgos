@@ -1,6 +1,8 @@
 package com.govind.algo.backtraking;
 
-import com.govind.util.ArrayListUtils;
+import com.govind.algo.hash.Solution;
+import com.govind.util.arraylist.ArrayListUtils;
+import org.omg.PortableInterceptor.INACTIVE;
 
 import java.util.*;
 
@@ -21,7 +23,7 @@ public class Sample {
         ArrayList<Character> arrayList7 = new ArrayListUtils<Character>().getArrayList(new Character[]{'1', '3', '8', '9', '4', '7', '2', '5', '6'});
         ArrayList<Character> arrayList8 = new ArrayListUtils<Character>().getArrayList(new Character[]{'6', '9', '2', '3', '5', '1', '8', '7', '4'});
         ArrayList<Character> arrayList9 = new ArrayListUtils<Character>().getArrayList(new Character[]{'7', '4', '5', '2', '8', '6', '3', '1', '9'});
-        ArrayList<String> result = new ArrayListUtils<String>().getArrayList(new String[]{"......2..",
+        ArrayList<String> result = new ArrayListUtils<>().getArrayList(new String[]{"......2..",
                 ".9.7...3.",
                 "......8..",
                 ".........",
@@ -32,16 +34,83 @@ public class Sample {
                 "93.....5."});
 
         List<Integer> a = new ArrayListUtils<Integer>().getArrayList(new Integer[]{100, 4, 200, 1, 3, 2});
-        System.out.println(a);
         Collections.sort(a);
 
+        new Sample().getPermutation();
+    }
 
-        for (int i = 1; i < 10; i++) {
-            System.out.println(jumbleNumber(i,105));
+    public void subsetsRecursive() {
+        ArrayList<Integer> arrayList = new ArrayListUtils<Integer>().getArrayList(new Integer[]{3, 2, 1});
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        subsetsRecursive(result, new ArrayList<Integer>(), 0, arrayList);
+        System.out.println(result);
+    }
+
+    public void subsetsRecursive(ArrayList<ArrayList<Integer>> result, ArrayList<Integer> current, int index, ArrayList<Integer> a) {
+        if (a.size() == index) {
+            result.add((ArrayList<Integer>) current.clone());
+            return;
         }
+        subsetsRecursive(result, current, index + 1, a);
+        current.add(a.get(index));
+        subsetsRecursive(result, current, index + 1, a);
+        current.remove(current.size() - 1);
     }
 
 
+    public void eightQueen() {
+        int noOfQueen = 4;
+        int[][] board = new int[noOfQueen][noOfQueen];
+        System.out.println(eightQueen(board, 0));
+        for (int k = 0; k < board.length; k++) {
+            for (int l = 0; l < board.length; l++) {
+                System.out.print(board[k][l] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    private boolean eightQueen(int[][] board, int columns) {
+        if (columns >= board.length) {
+            return true;
+        }
+
+
+        for (int r = 0; r < board.length; r++) {
+            if (isSafeToPlace(board, r, columns)) {
+                board[r][columns] = 1;
+
+                if (eightQueen(board, columns + 1)) {
+                    return true;
+                }
+
+                board[r][columns] = 0;
+            }
+        }
+        return false;
+    }
+
+    private boolean isSafeToPlace(int[][] board, int row, int columns) {
+        for (int k = 0; k < board.length; k++) {
+            if (board[row][k] == 1) {
+                return false;
+            }
+        }
+
+        for (int k = row, j = columns; k >= 0 && j >= 0; k--, j--) {
+            if (board[k][j] == 1) {
+                return false;
+            }
+        }
+
+        for (int k = row, j = columns; k < board.length && j >= 0; k++, j--) {
+            if (board[k][j] == 1) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 
     public static Set<Integer> jumbleNumber(int i, int number) {
@@ -56,15 +125,11 @@ public class Sample {
             set.add(first);
             int lastDigit = first % 10;
 
-            if (lastDigit == 0){
-                queue.add( (first * 10 ) + (lastDigit + 1));
-            }
-
-            else if (lastDigit == 9){
-                queue.add( (first * 10 ) + (lastDigit - 1));
-            }
-
-            else {
+            if (lastDigit == 0) {
+                queue.add((first * 10) + (lastDigit + 1));
+            } else if (lastDigit == 9) {
+                queue.add((first * 10) + (lastDigit - 1));
+            } else {
                 queue.add(first * 10 + lastDigit + 1);
                 queue.add(first * 10 + lastDigit - 1);
             }
@@ -142,6 +207,7 @@ public class Sample {
 
     public static int isValidSudoku(final List<String> arrayLists) {
         HashMap<Integer, List<Column>> hashMap = new HashMap<>();
+
         for (int i = 0; i < arrayLists.size(); i++) {
             for (int j = 0; j < arrayLists.size(); j++) {
                 if (arrayLists.get(i).charAt(j) == '.') {
@@ -358,22 +424,30 @@ public class Sample {
         return true;
     }
 
+    public void getPermutation() {
+        int n = 4;
+        int k = 6;
+        System.out.println(getPermutation(n, k - 1));
+    }
+
     public static String getPermutation(int n, int k) {
-        k--;
         ArrayList<Integer> arrayList = new ArrayList<>();
         for (int i = 1; i <= n; i++) {
             arrayList.add(i);
         }
 
         String result = "";
-        int index = 0;
-        while (arrayList.size() != 0 && k <= fact(arrayList.size())) {
-            int fact = fact(arrayList.size() - 1);
-            int currentIndex = k / fact;
+
+
+        while (!arrayList.isEmpty() && k < (fact(n))) {
+            int fact = fact(n - 1);
+            int index = k / fact;
             k %= fact;
-            result += arrayList.get(currentIndex);
-            arrayList.remove(currentIndex);
+            result += arrayList.get(index);
+            arrayList.remove(index);
+            n--;
         }
+
         return result;
     }
 
@@ -381,7 +455,12 @@ public class Sample {
         if (i == 0) {
             return 1;
         }
-        return i * fact(i - 1);
+
+        int fact = 1;
+        for (int j = 2; j <= i; j++) {
+            fact *= j;
+        }
+        return fact;
     }
 
     public static ArrayList<Integer> grayCode(int a) {
@@ -465,7 +544,13 @@ public class Sample {
     }
 
 
-    public static ArrayList<ArrayList<Integer>> subsetsWithDup(ArrayList<Integer> a) {
+    public void subsets() {
+        ArrayList<Integer> arrayList = new ArrayListUtils<Integer>().getArrayList(new Integer[]{15, 20, 12, 19, 4});
+        System.out.println(subsetsWithDup(arrayList));
+
+    }
+
+    public ArrayList<ArrayList<Integer>> subsetsWithDup(ArrayList<Integer> a) {
         Set<ArrayList<Integer>> result = new HashSet<>();
 
         int size = 1 << a.size();
@@ -519,6 +604,43 @@ public class Sample {
         return ans;
     }
 
+    public ArrayList<ArrayList<Integer>> subsets(ArrayList<Integer> a) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        int size = 1 << a.size();
+
+        for (int i = 0; i < size; i++) {
+            int k = i;
+            ArrayList<Integer> subset = new ArrayList<>();
+            int count = 0;
+            while (k > 0) {
+                int currentIndex = k & 1;
+                k >>= 1;
+                if (currentIndex == 1) {
+                    subset.add(a.get(count));
+                }
+                count++;
+
+            }
+            result.add(subset);
+        }
+
+        Collections.sort(result, new Comparator<ArrayList<Integer>>() {
+            @Override
+            public int compare(ArrayList<Integer> o1, ArrayList<Integer> o2) {
+                int min = Math.min(o1.size(), o2.size());
+                for (int i = 0; i < min; i++) {
+                    int comparator = Integer.compare(o1.get(i), o2.get(i));
+                    if (comparator != 0) {
+                        return comparator;
+                    }
+                }
+                return Integer.compare(o1.size(), o2.size());
+
+            }
+        });
+        return result;
+    }
+
     static ArrayList<ArrayList<Integer>> getSubsets(ArrayList<Integer> set, int index) {
         ArrayList<ArrayList<Integer>> allsubsets;
         if (set.size() == index) { // Base case - add empty set
@@ -569,24 +691,24 @@ public class Sample {
         combination.remove(combination.size() - 1);
     }
 
-    /*public ArrayList<ArrayList<Integer>> combinationSum(ArrayList<Integer> A, int B) {
+    /*public arraylist<arraylist<Integer>> combinationSum(arraylist<Integer> A, int B) {
 
         if (A == null)
             return null;
 
-        res = new ArrayList<>();
+        res = new arraylist<>();
 
         Collections.sort(A);
 
-        rec(A, new ArrayList<>(), B, 0);
+        rec(A, new arraylist<>(), B, 0);
 
         return res;
     }
 
-    public void rec(ArrayList<Integer> A, ArrayList<Integer> ans, int B, int index) {
+    public void rec(arraylist<Integer> A, arraylist<Integer> ans, int B, int index) {
 
         if (B == 0) {
-            res.add(new ArrayList<>(ans));
+            res.add(new arraylist<>(ans));
             return;
         }
 
@@ -606,7 +728,44 @@ public class Sample {
 
 
     }
+
 */
+
+    public void combinationSum() {
+        List<Integer> arrayList = new ArrayListUtils<Integer>().getArrayList(new Integer[]{15, 8, 15, 10, 19, 18, 10, 3, 11, 7, 17});
+        System.out.println(combinationSum(arrayList, 33));
+    }
+
+    public static ArrayList<ArrayList<Integer>> combinationSum(List<Integer> a, int b) {
+        Collections.sort(a);
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+
+        HashSet<Integer> set = new HashSet<>();
+        set.addAll(a);
+        combinationSum(a, b, new ArrayList<>(), result, 0, 0);
+        ArrayList<ArrayList<Integer>> arrayLists = new ArrayList<>();
+        arrayLists.addAll(result);
+        return arrayLists;
+    }
+
+    public static void combinationSum(List<Integer> a, int b, ArrayList<Integer> sum, ArrayList<ArrayList<Integer>> result, int index, int currentSum) {
+        if (currentSum == b) {
+            result.add(new ArrayList<>(sum));
+            return;
+        }
+        if (index == a.size()) {
+            return;
+        }
+
+        for (int i = index; i < a.size(); i++) {
+            if (currentSum + a.get(i) <= b) {
+                sum.add(a.get(i));
+                combinationSum(a, b, sum, result, i + 1, currentSum + a.get(i));
+                sum.remove(sum.size() - 1);
+            }
+        }
+    }
+
     public static ArrayList<ArrayList<Integer>> combinationSum(int n, int b) {
         ArrayList<Integer> a = new ArrayList<>();
         for (int i = 1; i <= n; i++) {
@@ -644,23 +803,23 @@ public class Sample {
         }
     }
 
-    /* static ArrayList<ArrayList<Integer>> res;
-     static ArrayList<Integer> A;
+    /* static arraylist<arraylist<Integer>> res;
+     static arraylist<Integer> A;
      static int N;
 
-     public static ArrayList<ArrayList<Integer>> subsets(ArrayList<Integer> A) {
-         ArrayList<Integer> temp;
-         res = new ArrayList<>();
-         temp = new ArrayList<>();
+     public static arraylist<arraylist<Integer>> subsets(arraylist<Integer> A) {
+         arraylist<Integer> temp;
+         res = new arraylist<>();
+         temp = new arraylist<>();
          A = A;
          N = A.size();
          Collections.sort(A);
 
          subset(0, temp);
 
-         Collections.sort(res, new Comparator<ArrayList<Integer>>() {
+         Collections.sort(res, new Comparator<arraylist<Integer>>() {
              @Override
-             public int compare(ArrayList<Integer> a, ArrayList<Integer> b) {
+             public int compare(arraylist<Integer> a, arraylist<Integer> b) {
                  int an = a.size();
                  int bn = b.size();
                  for (int i = 0; i < Math.min(an, bn); i++) {
@@ -675,10 +834,10 @@ public class Sample {
          return res;
      }
 
-     private static void subset(int index, ArrayList<Integer> arr) {
+     private static void subset(int index, arraylist<Integer> arr) {
 
          if (index == N) {
-             res.add(new ArrayList<>(arr));
+             res.add(new arraylist<>(arr));
              return;
          }
 

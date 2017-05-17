@@ -1,7 +1,10 @@
 package com.govind.algo.stack;
 
-import com.govind.util.ArrayListUtils;
+//import com.govind.util.ArrayListUtils;
 
+import com.govind.util.arraylist.ArrayListUtils;
+
+import java.lang.Integer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +14,8 @@ import java.util.Stack;
  * Created by govindp on 9/30/2015.
  */
 public class Sample {
+    Stack<Integer> stack1 = new Stack<>();
+
     public static void main(String[] args) {
         ArrayList<Integer> arrayList = new ArrayList<>();
         arrayList.add(6);
@@ -24,28 +29,183 @@ public class Sample {
         arrayList.add(20);
         arrayList.add(28);
 */
-        System.out.println(nextGreater(arrayList));
+        int[][] array = {{0, 0, 1, 0}, {0, 0, 1, 0}, {0, 0, 0, 0}, {0, 0, 1, 0}};
+        //   System.out.println(new TestClass().celebrity(array));
+        new Sample().findNoOfOnion();
+    }
+
+    public void findNoOfOnion(){
+        System.out.println(findOnion("((()()))"));
+    }
+
+    public int findOnion(String pattern){
+        Stack<String> stack = new Stack<>();
+        int onions = 0;
+        for (int i = 0; i < pattern.length(); i++) {
+            if (pattern.charAt(i) == '('){
+                stack.push("(");
+            }else {
+                stack.pop();
+                onions++;
+            }
+        }
+        return onions;
+    }
+
+    public void prevSmaller() {
+        ArrayList<Integer> arrayList = new ArrayListUtils<Integer>().getArrayList(new Integer[]{4, 7, 5, 3, 6, 2});
+        System.out.println(prevSmaller(arrayList));
+    }
+
+    public ArrayList<Integer> prevSmaller(ArrayList<Integer> arr) {
+        ArrayList<Integer> result = new ArrayList<>();
+        Stack<Integer> stack = new Stack<>();
+        arr.add(0,5);
+        stack.add(-1);
+        for (int i = 0; i < arr.size(); i++) {
+            if (stack.peek() < arr.get(i)) {
+                result.add(stack.peek());
+            } else {
+                while (stack.peek() != -1 && stack.peek() >= arr.get(i)) {
+                    stack.pop();
+                }
+                result.add(stack.peek());
+            }
+            stack.push(arr.get(i));
+        }
+        return result;
+    }
+
+    public void simplifyPath() {
+        System.out.println(simplifyPath1("/../"));
+    }
+
+    public String simplifyPath1(String path) {
+        Stack<String> stack = new Stack<>();
+        String[] tokens = path.split("/");
+
+        for (String token : tokens) {
+            if (token.equals(".")) {
+                continue;
+            }
+            if (token.equals("..") && !stack.isEmpty()) {
+                stack.pop();
+            } else if (!token.isEmpty() && !token.equals("..")) {
+                stack.push(token);
+            }
+        }
+
+        String result = "";
+
+        while (!stack.isEmpty() && !stack.peek().isEmpty()) {
+            result = "/" + stack.pop() + result;
+        }
+
+        return result.isEmpty() ?
+                "/"
+                : result;
+    }
+
+    public void rainHarvesting() {
+        int[] a = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
+        int left = 0;
+        int right = a.length - 1;
+        int maxLeft = 0;
+        int maxRight = 0;
+        int maxRain = 0;
+        while (left < right) {
+            if (a[left] <= a[right]) {
+                if (a[left] > maxLeft) {
+                    maxLeft = a[left];
+                } else {
+                    maxRain += maxLeft - a[left];
+
+                }
+                left++;
+            } else {
+                if (a[right] > maxRight) {
+                    maxRight = a[right];
+
+                } else {
+                    maxRain += maxRight - a[right];
+                }
+                right--;
+            }
+        }
+        System.out.println(maxRain);
+    }
+
+    public void reverse() {
+        Stack<Integer> stack = new Stack();
+        stack.add(4);
+        stack.add(3);
+        stack.add(2);
+        stack.add(1);
+        reverseUtil(stack);
+        while (!stack.isEmpty()) {
+            System.out.println(stack.pop());
+        }
+    }
+
+    public void reverseUtil(Stack<Integer> stack) {
+        if (stack.isEmpty()) {
+            return;
+        }
+
+        int top = stack.pop();
+        reverseUtil(stack);
+        insertToBottom(top, stack);
+    }
+
+    private void insertToBottom(int top, Stack<Integer> stack) {
+        if (stack.isEmpty()) {
+            stack.push(top);
+            return;
+        }
+        int temp = stack.pop();
+        insertToBottom(top, stack);
+
+        stack.push(temp);
+
+    }
+
+    public int celebrity(int[][] knows) {
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < knows.length; i++) {
+            stack.add(i);
+        }
+
+        while (!(stack.size() == 1)) {
+            int A = stack.pop();
+            int B = stack.pop();
+            if (knows[A][B] == 1) {
+                stack.push(B);
+            } else {
+                stack.push(A);
+            }
+        }
+        return stack.peek();
     }
 
     public static ArrayList<Integer> nextGreater(ArrayList<Integer> a) {
         ArrayList<Integer> result = new ArrayList<>();
         result.add(-1);
-        if (a.size() == -1){
+        if (a.size() == -1) {
             return result;
         }
         Stack<Integer> stack = new Stack<>();
         stack.add(a.get(a.size() - 1));
-        for (int i = a.size() -2; i >= 0; i--){
-            if (!stack.isEmpty() && stack.peek() > a.get(i)){
+        for (int i = a.size() - 2; i >= 0; i--) {
+            if (!stack.isEmpty() && stack.peek() > a.get(i)) {
                 result.add(stack.peek());
-            }else {
-                while (!stack.isEmpty() && stack.peek() <= a.get(i)){
+            } else {
+                while (!stack.isEmpty() && stack.peek() <= a.get(i)) {
                     stack.pop();
                 }
 
-                if (stack.isEmpty()){
+                if (stack.isEmpty()) {
                     result.add(-1);
-                }else {
+                } else {
                     result.add(stack.peek());
                 }
             }
@@ -53,7 +213,7 @@ public class Sample {
         }
 
         ArrayList<Integer> reverse = new ArrayList<>();
-        for (int i = result.size() - 1; i  >= 0; i--){
+        for (int i = result.size() - 1; i >= 0; i--) {
             reverse.add(result.get(i));
         }
         return reverse;
@@ -63,7 +223,7 @@ public class Sample {
         ArrayList<Integer> resulting = new ArrayList<>();
 
         LinkedList<Integer> processing = new LinkedList<>();
-        if(a.size() < b){
+        if (a.size() < b) {
             return resulting;
         }
         for (int i = 0; i < b; i++) {

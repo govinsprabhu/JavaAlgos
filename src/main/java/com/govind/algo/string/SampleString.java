@@ -1,6 +1,9 @@
 package com.govind.algo.string;
 
 
+import com.govind.util.arraylist.ArrayListUtils;
+import com.govind.util.linkedlist.ListNode;
+
 import java.math.BigInteger;
 import java.util.*;
 
@@ -9,24 +12,379 @@ import java.util.*;
  */
 public class SampleString {
     public static void main(String[] args) {
-        String[] strings = {"This", "is", "an", "example", "of", "text", "justification."};
+        int[][] matrix = {{1, 1},
+                {0, 0}};
+        new SampleString().compressString();
+    }
+
+    public void compressString() {
+        String string = "aaabbccc";
+        char[] array = string.toCharArray();
+        int temp = 0;
+        for (int i = 0; i < string.length(); ) {
+            int count = 0;
+            int previous = i;
+            while (i < string.length() && array[previous] == array[i]) {
+                count++;
+                i++;
+
+            }
+
+            array[temp] = array[i - count];
+            array[temp + 1] = (char) (count + 48);
+            temp += 2;
+        }
+
+        array[temp] = '\0';
+        System.out.println(array);
+    }
+
+    public List<String> addOperators(String num, int target) {
+        if (num == null || num.isEmpty()) {
+            return null;
+        }
+
+        List<String> list = new ArrayList<>();
+        char[] result = new char[num.length() + num.length() - 1];
+        char[] operators = {'*', '+', '-'};
+        addOperators(num, 0, result, target, 0, operators, list);
+        return list;
+
+    }
+
+    public void nextSmallestPalindrom() {
+        int[] number = {1, 5, 4, 3, 6, 7, 2};
 
 
-        ArrayList<String> arrayList = new ArrayList<String>();
-        arrayList.add("what");
-        arrayList.add("must");
-        arrayList.add("be");
-        arrayList.add("shall");
-        arrayList.add("be");
-/*
-        arrayList.add("text");
-        arrayList.add("justification");
-*/
+        int i = 0;
+        int j = number.length - 1;
+        int mid = number.length / 2;
+        if (number.length % 2 == 0) {
+            i = mid - 1;
+            j = mid + 1;
+        } else {
+            i = mid - 1;
+            j = mid;
+        }
 
-        ArrayList<String> arrayList1 = fullJustify1(arrayList, 16);
-        System.out.println(arrayList1);
-        arrayList1.forEach(x -> System.out.println(x.length()));
+        while (i >= 0 && number[i] == number[j]) {
+            i--;
+            j++;
+        }
 
+        boolean isCrossed = false;
+        if (i < 0) {
+            isCrossed = true;
+        }
+
+
+    }
+
+    public void addOperators(String num, int index, char[] currentResult, int target, int currentTarget, char[] operators, List<String> result) {
+        if (currentResult.length == index + 1) {
+            char operator = currentResult[index - 1];
+            currentResult[index] = num.charAt(index / 2);
+            if (operate(currentTarget, operator, Integer.parseInt(String.valueOf(num.charAt(index / 2)))) == target) {
+                result.add(String.valueOf(currentResult));
+            }
+            return;
+        }
+
+        currentResult[index] = num.charAt(index / 2);
+
+        int currentNumber = Integer.parseInt(String.valueOf(num.charAt(index / 2)));
+        if (index != 0) {
+            currentTarget = operate(currentTarget, currentResult[index - 1], currentNumber);
+        }
+        for (int i = 0; i < operators.length; i++) {
+            if (index == 0 && operators[i] == '*') {
+                currentTarget = 1;
+            }
+            if (index == 2 && operators[i] == '*') {
+                System.out.println();
+            }
+            currentResult[index + 1] = operators[i];
+
+            if (index == 0) {
+
+                addOperators(num, index + 2, currentResult, target, currentNumber, operators, result);
+            } else {
+                addOperators(num, index + 2, currentResult, target, currentTarget, operators, result);
+            }
+            currentResult[index + 1] = '\0';
+        }
+    }
+
+    private int operate(int a, char operator, int b) {
+        switch (operator) {
+            case '+':
+                return a + b;
+            case '-':
+                return a - b;
+            case '*':
+                return a * b;
+        }
+        return -1;
+    }
+
+    static int numberOfPaths(int[][] a, int M, int N) {
+        int[][] dpTable = new int[M][N];
+        for (int i = 0; i < N; i++) {
+            if (a[0][i] == 0) {
+                break;
+            }
+            dpTable[0][i] = a[0][i];
+        }
+
+        for (int i = 0; i < M; i++) {
+            if (a[i][0] == 0) {
+                break;
+            }
+            dpTable[i][0] = a[i][0];
+        }
+
+        for (int i = 1; i < M; i++) {
+            for (int j = 1; j < N; j++) {
+                if (a[i][j] != 0) {
+                    dpTable[i][j] = (dpTable[i - 1][j] % 1000000007 + dpTable[i][j - 1] % 1000000007);
+                }
+            }
+        }
+
+        return dpTable[M - 1][N - 1] % 1000000007;
+    }
+
+    public void replaceWithCharacterCount() {
+        String string = "aaabbccdeeabb";
+        char[] chars = string.toCharArray();
+        if (chars.length == 0 || chars.length == 1) {
+            return;
+        }
+        for (int end = chars.length - 2, start = chars.length - 1; end >= 0; end--) {
+            if (start != end && chars[end] != chars[end + 1]) {
+                chars[end + 2] = (char) (start - end + 48);
+                start = end;
+            } else {
+                //    chars[end] = chars[]
+            }
+        }
+
+
+        System.out.println(chars);
+    }
+
+    class LinkedList {
+        Character character;
+        HashMap<Character, LinkedList> next;
+        ArrayList<Character> values;
+
+        public LinkedList(Character value) {
+            this.character = value;
+            next = new HashMap<>();
+            values = new ArrayList<>();
+        }
+    }
+
+
+    public void hierarchicalJson() {
+        ArrayList<String> strings = new ArrayListUtils<>().getArrayList(new String[]{"a>b=1", "a>b=2", "a>c>d=3", "a>c>e=4"});
+
+        LinkedList root = new LinkedList(strings.get(0).charAt(0));
+        LinkedList backup = root;
+        for (String s : strings) {
+            root = backup;
+            if (s.charAt(0) != root.character) {
+                System.out.println("Not valid");
+                return;
+            }
+            for (int i = 1; i < s.length(); i++) {
+                if (s.charAt(i) == '>' && i == s.length() - 1) {
+                    System.out.println("Not valid");
+                    return;
+                }
+
+                if (s.charAt(i) == '>') {
+                    LinkedList linkedList;
+
+                    if (root.next.containsKey(s.charAt(i + 1))) {
+                        linkedList = root.next.get(s.charAt(i + 1));
+                    } else {
+                        linkedList = new LinkedList(s.charAt(i + 1));
+                        root.next.put(s.charAt(i + 1), linkedList);
+                    }
+
+
+                    i++;
+                    if (s.charAt(i + 1) == '>' && linkedList.values.size() >= 1) {
+                        System.out.println("Not valid");
+                        return;
+                    }
+
+                    root = linkedList;
+
+                } else if (s.charAt(i) == '=' && i < s.length() - 1) {
+                    root.values.add(s.charAt(i + 1));
+                    i++;
+                }
+            }
+
+        }
+        SampleString.Result result = new SampleString.Result();
+        getJson(backup, result);
+
+        System.out.println(result.result + "\n}");
+
+    }
+
+    class Result {
+        String result = "{\n";
+    }
+
+    private void getJson(LinkedList root, SampleString.Result result) {
+        if (root.values.size() >= 1) {
+            result.result += root.character + " ";
+            if (root.values.size() == 1) {
+                result.result += " : " + root.values.get(0) + " ,\n";
+                return;
+            }
+            result.result += " [ ";
+            for (int i = 0; i < root.values.size(); i++) {
+                result.result += root.values.get(i) + ((root.values.size() == i + 1) ? "" : ", ");
+            }
+
+            result.result += " ] \n";
+            return;
+        }
+
+        result.result += root.character + " : { \n";
+        for (Character character : root.next.keySet()) {
+            getJson(root.next.get(character), result);
+        }
+
+        result.result += " } " + "\n";
+    }
+
+    public void fullJustify() {
+        ArrayList<String> words = new ArrayListUtils<>().
+                getArrayList(new String[]{"am", "fasgoprn", "lvqsrjylg", "rzuslwan", "xlaui", "tnzegzuzn", "kuiwdc", "fofjkkkm", "ssqjig", "tcmejefj", "uixgzm", "lyuxeaxsg", "iqiyip", "msv", "uurcazjc", "earsrvrq", "qlq", "lxrtzkjpg", "jkxymjus", "mvornwza", "zty", "q", "nsecqphjy"});
+        System.out.println(fullJustify2(words, 14));
+
+    }
+
+    public ArrayList<String> fullJustify2(ArrayList<String> a, int b) {
+
+        ArrayList<String> resultArray = new ArrayList<>();
+
+        int len;
+        int k = 0;
+        for (int i = 0; i < a.size(); i += k) {
+            len = 0;
+            k = 0;
+            for (; i + k < a.size() && len + a.get(i + k).length() <= b - k; k++) {
+                len += a.get(i + k).length();
+
+            }
+
+            String result = "";
+            for (int j = i; j < i + k; j++) {
+
+                result += a.get(j);
+
+                int space = ((b - len) / (k == 1 ? 1 : (k - 1))) + (((b - len) % (k == 1 ? 1 : (k - 1)) > j - i) ? 1 : 0);
+
+                if (i + k == a.size()) {
+                    space = 1;
+                }
+
+                if (j + 1 == i + k) {
+                    space = b - result.length();
+                }
+
+
+                while (space > 0) {
+                    result += " ";
+                    space--;
+                }
+            }
+
+            if (i + k == a.size()) {
+                int space = b - result.length();
+                while (space > 0) {
+                    result += " ";
+                    space--;
+                }
+            }
+            resultArray.add(result);
+
+        }
+
+        return resultArray;
+    }
+
+    public void countAndSay() {
+        System.out.println(countAndSay1(4));
+    }
+
+    public String countAndSay1(int a) {
+
+        String currentString = "1";
+        for (int i = 1; i < a; i++) {
+            Character previous = null;
+            int count = 1;
+            String result = "";
+
+            for (int j = 0; j < currentString.length(); j++) {
+                if (previous != null && previous != currentString.charAt(j)) {
+                    result += String.valueOf(count) + previous;
+                    count = 1;
+
+                } else if (previous != null) {
+                    count++;
+
+                }
+                previous = currentString.charAt(j);
+            }
+
+            currentString = result + String.valueOf(count) + currentString.charAt(currentString.length() - 1);
+        }
+
+        return currentString;
+    }
+
+    public void replaceStringWithSubStrin() {
+        String original = "abababcdefababcdab";
+        String replace = "ab";
+        int start = 0;
+        int currectUntil = 0;
+        String result = "";
+        for (int index = 0; index < original.length(); ) {
+            if (original.charAt(index) == replace.charAt(0)) {
+                int replaceIndex = 0;
+                while (replaceIndex < replace.length() && index < original.length() && original.charAt(index) == replace.charAt(replaceIndex)) {
+                    index++;
+                    replaceIndex++;
+                }
+                if (replaceIndex == replace.length()) {
+                    currectUntil = index;
+                }
+
+
+            } else {
+                if (currectUntil != start) {
+                    result += "X";
+                    start = currectUntil;
+                }
+                result += original.charAt(index);
+
+                index++;
+            }
+
+        }
+        if (currectUntil != start) {
+            result += "X";
+            start = currectUntil;
+        }
+        System.out.println(result);
     }
 
     public static ArrayList<String> fullJustify1(ArrayList<String> a, int b) {
@@ -74,9 +432,9 @@ public class SampleString {
                 currentLength += a.get(i + k).length();
             }
 
-             currentString = a.get(i);
-             remaining = b  - currentLength;
-            for (int j = i + 1; j < i + k ; j++) {
+            currentString = a.get(i);
+            remaining = b - currentLength;
+            for (int j = i + 1; j < i + k; j++) {
                 if (i + k >= a.size()) {
                     currentString += " ";
                 } else {
@@ -92,7 +450,7 @@ public class SampleString {
             remaining = b - currentString.length();
             while (remaining > 0) {
                 currentString += " ";
-                remaining --;
+                remaining--;
             }
             arrayList.add(currentString);
 
@@ -223,8 +581,6 @@ public class SampleString {
         }
         return resultString;
     }
-
-
 
 
     public static String multiply(String a, String b) {

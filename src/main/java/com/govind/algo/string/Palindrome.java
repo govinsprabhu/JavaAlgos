@@ -22,7 +22,7 @@ public class Palindrome {
             }
 
             else if(!((newString.charAt(j) >= 97 && newString.charAt(j) <= 132) || (newString.charAt(j) >= 48 && newString.charAt(j) <= 57))){
-                j--;
+                   j--;
             }
 
             else if(newString.charAt(i) == newString.charAt(j)){

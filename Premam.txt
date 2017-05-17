@@ -1,0 +1,5 @@
+name = Premam
+genre = romance
+language = Malayalam
+time = 120
+lead actor = nivin

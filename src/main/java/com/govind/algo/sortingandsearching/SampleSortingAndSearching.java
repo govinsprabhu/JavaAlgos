@@ -14,8 +14,8 @@ public class SampleSortingAndSearching {
 
     }
     public static void merge(int[] a, int[] b, int lastA, int lastB) {
-       int indexA = lastA - 1; /* Index of last element in array a */
-       int indexB = lastB - 1; /* Index of last element in array b */
+       int indexA = lastA - 1; /* IndexWithNum of last element in array a */
+       int indexB = lastB - 1; /* IndexWithNum of last element in array b */
        int indexMerged = lastB + lastA - 1; /*I* end of merged array */
               /* Merge a and b, starting from the last element in each */
      while (/*indexA >= 0 &&*/ indexB >= 0) {

@@ -1,6 +1,6 @@
 package com.govind.algo.tree;
 
-import com.govind.util.ArrayListUtils;
+import com.govind.util.arraylist.ArrayListUtils;
 import com.govind.util.tree.BinaryTree;
 import com.govind.util.tree.tries.Tries;
 
@@ -16,31 +16,1056 @@ public class Solution {
     Stack<TreeNode> stack1;
     Stack<TreeNode> stack2;
     private Tries node;
+    int data;
+
+    public Solution(int data) {
+        this.data = data;
+    }
+
+
+    public static TreeNode getTreeNode2() {
+        TreeNode TreeNode1 = new TreeNode(10);
+        TreeNode TreeNode2 = new TreeNode(8);
+        TreeNode TreeNode3 = new TreeNode(12);
+        TreeNode TreeNode4 = new TreeNode(7);
+        TreeNode TreeNode5 = new TreeNode(9);
+        TreeNode TreeNode6 = new TreeNode(11);
+        TreeNode TreeNode7 = new TreeNode(13);
+
+        TreeNode1.left = TreeNode2;
+        TreeNode1.right = TreeNode3;
+/*        TreeNode2.left = TreeNode4;
+        TreeNode3.right = TreeNode5;
+
+        TreeNode2.right = TreeNode5;
+        TreeNode3.left = TreeNode6;
+        TreeNode3.right = TreeNode7;
+*/
+        /*TreeNode5.right = new TreeNode(15);
+        TreeNode5.right.right = new TreeNode(20);
+        TreeNode5.right.right.right = new TreeNode(25);
+        */
+        return TreeNode1;
+    }
+
+    public static TreeNode getTreeNode() {
+        TreeNode TreeNode1 = new TreeNode(10);
+        TreeNode TreeNode2 = new TreeNode(8);
+        TreeNode TreeNode3 = new TreeNode(12);
+        TreeNode TreeNode4 = new TreeNode(7);
+        TreeNode TreeNode5 = new TreeNode(9);
+        TreeNode TreeNode6 = new TreeNode(11);
+        TreeNode TreeNode7 = new TreeNode(13);
+
+        TreeNode1.left = TreeNode2;
+        TreeNode1.right = TreeNode3;
+
+        TreeNode2.left = TreeNode4;
+        TreeNode2.right = TreeNode5;
+        TreeNode3.left = TreeNode6;
+        TreeNode3.right = TreeNode7;
+        return TreeNode1;
+    }
+
 
     public static void main(String[] args) {
-        TreeLinkNode TreeLinkNode10 = new TreeLinkNode(10);
-        TreeLinkNode TreeLinkNode1 = new TreeLinkNode(1);
-        TreeLinkNode TreeLinkNode2 = new TreeLinkNode(2);
-        TreeLinkNode TreeLinkNode3 = new TreeLinkNode(3);
-        TreeLinkNode TreeLinkNode4 = new TreeLinkNode(4);
-        TreeLinkNode TreeLinkNode5 = new TreeLinkNode(5);
-        TreeLinkNode TreeLinkNode6 = new TreeLinkNode(6);
-        TreeLinkNode TreeLinkNode7 = new TreeLinkNode(5);
-
-        TreeLinkNode10.left = TreeLinkNode1;
-        TreeLinkNode10.right = TreeLinkNode2;
-        TreeLinkNode1.left = TreeLinkNode3;
-        TreeLinkNode1.right = TreeLinkNode4;
-        TreeLinkNode2.left = TreeLinkNode5;
-        TreeLinkNode2.right = TreeLinkNode6;
-        TreeLinkNode3.left = null;
-        TreeLinkNode3.right = null;
-        new Solution().connect(TreeLinkNode10);
-        TreeLinkNode.inorder(TreeLinkNode10);
+        new Solution().printNodesKDistanceKfromLeaf();
 
     }
 
-    public void connect(TreeLinkNode root) {
+
+
+
+    public  void printNodesKDistanceKfromLeaf(){
+        TreeNode treeNode = getTreeNode();
+        int k = 3;
+        ArrayList<Integer> result = new ArrayList<>();
+        System.out.println(printNodesFromDistanceKFromLeaf(treeNode, result, k));
+        System.out.println(result);
+    }
+
+    private int printNodesFromDistanceKFromLeaf(TreeNode treeNode, ArrayList<Integer> result, int k) {
+        if (treeNode == null){
+            return 1;
+        }
+
+        int left = printNodesFromDistanceKFromLeaf(treeNode.left, result, k);
+        int right = printNodesFromDistanceKFromLeaf(treeNode.right, result, k);
+        if (left == k || right == k){
+            result.add(treeNode.val);
+        }
+
+        return Math.min(left, right) + 1;
+    }
+
+    public void uniqueTree() {
+        int n = 3;
+        for (TreeNode treeNode : printUniqueTree(1, n)) {
+            TreeNode.inorder(treeNode);
+        }
+    }
+    public ArrayList<TreeNode> printUniqueTree(int l, int h) {
+        if (l > h) {
+            ArrayList<TreeNode> arrayList = new ArrayList<>();
+            arrayList.add(null);
+            return arrayList;
+        }
+
+        ArrayList<TreeNode> result = new ArrayList<>();
+        for (int i = l; i <= h; i++) {
+
+            ArrayList<TreeNode> left = printUniqueTree(l, i - 1);
+            ArrayList<TreeNode> right = printUniqueTree(i + 1, h);
+            for (TreeNode leftT : left) {
+
+                for (TreeNode rightT : right) {
+                    TreeNode treeNode = new TreeNode(i);
+                    treeNode.left = leftT;
+                    treeNode.right = rightT;
+                    result.add(treeNode);
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+    public void getMaxPath() {
+        TreeNode treeNode = getTreeNode();
+        Height height = new Height();
+        System.out.println(findMaxPath(treeNode, height));
+        System.out.println(height.height);
+
+    }
+
+    private int findMaxPath(TreeNode treeNode, Height height) {
+        if (treeNode == null) {
+            return 0;
+        }
+
+        int left = findMaxPath(treeNode.left, height);
+        int right = findMaxPath(treeNode.right, height);
+        height.height = Math.max(height.height, left + right + treeNode.val);
+
+        return Math.max(left, right) + treeNode.val;
+    }
+
+
+    public void deleteNodeLessThanSum() {
+        TreeNode treeNode = getTreeNode();
+
+    }
+
+    public void reverseLevelOrderTraversal() {
+        TreeNode treeNode = getTreeNode();
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        levelOrder1(treeNode, 0, result);
+        Collections.reverse(result);
+        System.out.println(result);
+    }
+
+    private void levelOrder1(TreeNode treeNode, int depth, ArrayList<ArrayList<Integer>> result) {
+        if (treeNode == null) {
+            return;
+        }
+
+        if (result.size() == depth) {
+            result.add(new ArrayList<Integer>());
+        }
+
+        result.get(depth).add(treeNode.val);
+
+        levelOrder1(treeNode.left, depth + 1, result);
+        levelOrder1(treeNode.right, depth + 1, result);
+
+    }
+
+    public void cntMatrix() {
+        TreeNode treeNode = getTreeNode();
+        TreeNode treeNode1 = getTreeNode2();
+        System.out.println(cntMatrix(treeNode, treeNode1));
+    }
+
+    public int cntMatrix(TreeNode a, TreeNode b) {
+        if (a == null && b == null) {
+            return 0;
+        }
+        if (a != null && b == null) {
+            return -1;
+        }
+
+        if (a == null && b != null) {
+
+            return numberOfNodesOfB(b, 0);
+        }
+        int left = cntMatrix(a.left, b.left);
+        int right = cntMatrix(a.right, b.right);
+        if (left == -1) {
+            return left;
+        }
+        if (right == -1) {
+            return right;
+        }
+
+        return left + right;
+
+    }
+
+    public void getMode() {
+        ArrayList<Integer> numbers = new ArrayListUtils<Integer>().getArrayList(new Integer[]{2, 2, 2, 3, 3});
+        ArrayList<ArrayList<Integer>> q = new ArrayList<>();
+        ArrayList<Integer> q1 = new ArrayList<>();
+        ArrayList<Integer> q2 = new ArrayList<>();
+        ArrayList<Integer> q3 = new ArrayList<>();
+        q1.add(1);
+        q1.add(3);
+        q2.add(5);
+        q2.add(4);
+        q3.add(2);
+        q3.add(4);
+        q.add(q1);
+        q.add(q2);
+        q.add(q3);
+        System.out.println(getMode(numbers, q));
+    }
+
+    public ArrayList<Integer> getMode(ArrayList<Integer> a, ArrayList<ArrayList<Integer>> b) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < a.size(); i++) {
+            if (map.containsKey(a.get(i))) {
+                popFromStack(a.get(i), stack);
+            }
+            map.put(a.get(i), map.containsKey(a.get(i)) ? map.get(a.get(i)) + 1 : 1);
+            insertToStack(a.get(i), stack, map);
+        }
+
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i = 0; i < b.size(); i++) {
+            for (int j = 0; j < b.get(0).size() - 1; j += 2) {
+
+            }
+        }
+
+        return result;
+    }
+
+    private void insertToStack(Integer newNumber, Stack<Integer> stack, HashMap<Integer, Integer> map) {
+        Stack<Integer> backUp = new Stack<>();
+        while (map.get(stack.peek()) > map.get(newNumber) || (map.get(stack.peek()) == map.get(newNumber) && stack.peek() > newNumber)) {
+            backUp.push(stack.pop());
+        }
+
+        stack.push(newNumber);
+        while (!backUp.isEmpty()) {
+            stack.push(backUp.pop());
+        }
+    }
+
+    private void popFromStack(Integer arrayValue, Stack<Integer> stack) {
+        Stack<Integer> backUp = new Stack<>();
+        while (stack.peek() != arrayValue) {
+            backUp.push(stack.pop());
+        }
+
+        stack.pop();
+        while (!backUp.isEmpty()) {
+            stack.push(backUp.pop());
+        }
+    }
+
+    private int numberOfNodesOfB(TreeNode b, int count) {
+        if (b == null) {
+            return 0;
+
+        }
+
+
+        return numberOfNodesOfB(b.left, count + 1) + 1 +
+                numberOfNodesOfB(b.right, count + 1);
+    }
+
+    public void printDiffereceBetweenOddAndEvenLevel() {
+        TreeNode treeNode = getTreeNode();
+        System.out.println(printDifference(treeNode));
+    }
+
+    private int printDifference(TreeNode treeNode) {
+        if (treeNode == null) {
+            return 0;
+        }
+
+        return treeNode.val - printDifference(treeNode.left) - printDifference(treeNode.right);
+    }
+
+    public void getSumOfLengthOfLeftAndRight() {
+        TreeNode treeNode = getTreeNode();
+
+        System.out.println(getSumOfLengthOfLeftAndRightUtil(treeNode, new Height(), false));
+    }
+
+
+    private int getSumOfLengthOfLeftAndRightUtil(TreeNode treeNode, Height height, boolean isLeft) {
+        if (treeNode == null) {
+            return 0;
+        }
+
+        Height leftHeight = new Height();
+        Height rightHeight = new Height();
+
+        int left = getSumOfLengthOfLeftAndRightUtil(treeNode.left, leftHeight, true);
+        int right = getSumOfLengthOfLeftAndRightUtil(treeNode.right, rightHeight, false);
+        if (isLeft) {
+            height.height = leftHeight.height + 1;
+        } else {
+            height.height = rightHeight.height + 1;
+        }
+
+        return Math.max(leftHeight.height + rightHeight.height + 1, Math.max(left, right));
+
+    }
+
+    private int diameter(TreeNode treeNode, Height height) {
+        if (treeNode == null) {
+            return 0;
+        }
+
+        Height leftHeight = null;
+        Height rightHeight = null;
+
+        int left = diameter(treeNode.left, leftHeight);
+        int right = diameter(treeNode.right, rightHeight);
+        height.height = leftHeight.height + rightHeight.height + 1;
+
+        return Math.max(height.height, Math.max(left, right));
+    }
+
+
+    public void levelOrder() {
+        TreeNode treeNode = getTreeNode();
+        //System.out.println(levelOrder(treeNode));
+        ArrayList<ArrayList<Integer>> arrayLists = new ArrayList<>();
+        levelOrder(treeNode, 0, arrayLists);
+        System.out.println(arrayLists);
+    }
+
+    public void levelOrder(TreeNode treeNode, int depth, ArrayList<ArrayList<Integer>> arrayLists) {
+        if (treeNode == null) {
+            return;
+        }
+
+        if (arrayLists.size() == depth) {
+            arrayLists.add(new ArrayList<Integer>());
+        }
+
+        arrayLists.get(depth).add(treeNode.val);
+        levelOrder(treeNode.left, depth + 1, arrayLists);
+        levelOrder(treeNode.right, depth + 1, arrayLists);
+    }
+
+
+    public ArrayList<ArrayList<Integer>> levelOrder(TreeNode a) {
+        Queue<NodeWithLevel> queue = new LinkedList<>();
+        queue.add(new NodeWithLevel(a, 0));
+        int level = 0;
+        ArrayList<ArrayList<Integer>> arrayLists = new ArrayList<>();
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            NodeWithLevel nodeWithLevel = queue.poll();
+            if (level == nodeWithLevel.level) {
+                arrayList.add(nodeWithLevel.node.val);
+            } else {
+                arrayLists.add(arrayList);
+                arrayList = new ArrayList<>();
+                arrayList.add(nodeWithLevel.node.val);
+                level++;
+            }
+            if (nodeWithLevel.node.left != null) {
+                queue.add(new NodeWithLevel(nodeWithLevel.node.left, nodeWithLevel.level + 1));
+            }
+            if (nodeWithLevel.node.right != null) {
+                queue.add(new NodeWithLevel(nodeWithLevel.node.right, nodeWithLevel.level + 1));
+            }
+        }
+        arrayLists.add(arrayList);
+        return arrayLists;
+    }
+
+class NodeWithLevel {
+    TreeNode node;
+    int level;
+
+    public NodeWithLevel(TreeNode node, int level) {
+        this.node = node;
+        this.level = level;
+    }
+}
+
+
+    public void childrenSumProperty() {
+        TreeNode treeNode = getTreeNode();
+
+        childrenSumProperty(treeNode);
+        TreeNode.inorder(treeNode);
+    }
+
+    private int childrenSumProperty(TreeNode treeNode) {
+        if (treeNode == null) {
+            return 0;
+        }
+
+        if (treeNode.left == null && treeNode.right == null) {
+            return treeNode.val;
+        }
+
+
+        int left = childrenSumProperty(treeNode.left);
+        int right = childrenSumProperty(treeNode.right);
+
+        int diff = left + right - treeNode.val;
+        if (diff > 0) {
+            treeNode.val = treeNode.val + diff;
+        } else {
+            updateTheChildren(treeNode, diff);
+
+        }
+
+        return treeNode.val;
+    }
+
+    private void updateTheChildren(TreeNode root, int diff) {
+        if (root == null) {
+            return;
+        }
+
+        if (root.left != null) {
+            root.left.val = root.left.val + diff * -1;
+            childrenSumProperty(root.left);
+        } else if (root.right != null) {
+            root.right.val = root.right.val + diff * -1;
+            childrenSumProperty(root.right);
+        }
+        return;
+    }
+
+    public void printPath() {
+        TreeNode treeNode = getTreeNode();
+        int data = 9;
+
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        ArrayList<Integer> result = printPath(treeNode, data, arrayList);
+        if (result == null) {
+            System.out.println("NOT FOUND");
+        } else {
+            System.out.println(result);
+        }
+    }
+
+    private ArrayList<Integer> printPath(TreeNode treeNode, int data, ArrayList<Integer> arrayList) {
+        if (treeNode == null) {
+            return null;
+        }
+
+        if (treeNode.val == data) {
+            return arrayList;
+        }
+
+        arrayList.add(1);
+        ArrayList<Integer> left = printPath(treeNode.left, data, (ArrayList<Integer>) arrayList.clone());
+        arrayList.set(arrayList.size() - 1, 0);
+        ArrayList<Integer> right = printPath(treeNode.right, data, (ArrayList<Integer>) arrayList.clone());
+        return left == right && left == null ? null : left == null ? right : left;
+    }
+
+
+    public void printBoarder() {
+        TreeNode treeNode = getTreeNode();
+
+        printLeft(treeNode.left);
+        System.out.print(treeNode.val + " ->");
+        printRight(treeNode.right);
+    }
+
+    private void printRight(TreeNode right) {
+        if (right.left == null && right.right == null) {
+            System.out.print(right.val + " ->");
+            return;
+        }
+        System.out.println(right.val + " ->");
+        printRight(right.left);
+    }
+
+    private void printLeft(TreeNode treeNode) {
+        if (treeNode.left == null && treeNode.right == null) {
+            System.out.print(treeNode.val + " ->");
+            return;
+        }
+        printLeft(treeNode.right);
+        printLeft(treeNode.left);
+
+    }
+
+    public void reorderSwappedTree() {
+        TreeNode treeNode = getTreeNode();
+        TreeNode.inorder(treeNode);
+        TreeNodeForSwappedNodeTree treeNodeForSwappedNodeTree = new TreeNodeForSwappedNodeTree();
+        findSwappedNode(treeNode, treeNodeForSwappedNodeTree);
+        if (treeNodeForSwappedNodeTree.last == null) {
+            int temp = treeNodeForSwappedNodeTree.first.val;
+            treeNodeForSwappedNodeTree.first.val = treeNodeForSwappedNodeTree.middle.val;
+            treeNodeForSwappedNodeTree.middle.val = temp;
+        } else {
+            int temp = treeNodeForSwappedNodeTree.first.val;
+            treeNodeForSwappedNodeTree.first.val = treeNodeForSwappedNodeTree.last.val;
+            treeNodeForSwappedNodeTree.last.val = temp;
+        }
+        System.out.println();
+        TreeNode.inorder(treeNode);
+    }
+
+    private void findSwappedNode(TreeNode treeNode, TreeNodeForSwappedNodeTree treeNodeForSwappedNodeTree) {
+        if (treeNode == null) {
+            return;
+        }
+
+        findSwappedNode(treeNode.left, treeNodeForSwappedNodeTree);
+        if (treeNodeForSwappedNodeTree.previous != null && treeNodeForSwappedNodeTree.previous.val > treeNode.val) {
+            if (treeNodeForSwappedNodeTree.first == null) {
+                treeNodeForSwappedNodeTree.first = treeNodeForSwappedNodeTree.previous;
+                treeNodeForSwappedNodeTree.middle = treeNode;
+            } else {
+                treeNodeForSwappedNodeTree.last = treeNode;
+            }
+        }
+        treeNodeForSwappedNodeTree.previous = treeNode;
+        findSwappedNode(treeNode.right, treeNodeForSwappedNodeTree);
+    }
+
+class TreeNodeForSwappedNodeTree {
+    TreeNode first;
+    TreeNode middle;
+    TreeNode last;
+    TreeNode previous;
+}
+
+    public void isBalanced() {
+        TreeNode treeNode = getTreeNode();
+        System.out.println(isBalanced(treeNode, new Height()));
+
+    }
+
+    private boolean isBalanced(TreeNode treeNode, Height height) {
+        if (treeNode == null) {
+            return true;
+        }
+
+        Height left = new Height(), right = new Height();
+        boolean leftHeight = isBalanced(treeNode.left, left);
+        boolean rightHeight = isBalanced(treeNode.right, right);
+
+        if (Math.abs(left.height - right.height) >= 2) {
+            return false;
+        }
+
+        height.height = Math.max(left.height, right.height) + 1;
+        return leftHeight && rightHeight;
+    }
+
+    public void getLongestPath() {
+        TreeNode TreeNode1 = new TreeNode(10);
+        TreeNode TreeNode2 = new TreeNode(8);
+        TreeNode TreeNode3 = new TreeNode(12);
+        TreeNode TreeNode4 = new TreeNode(7);
+        TreeNode TreeNode5 = new TreeNode(9);
+        TreeNode TreeNode6 = new TreeNode(11);
+        TreeNode TreeNode7 = new TreeNode(13);
+
+        //TreeNode10.left = TreeNode1;
+        //TreeNode10.right = TreeNode2;
+        TreeNode1.left = TreeNode2;
+        TreeNode1.right = TreeNode3;
+        TreeNode2.left = TreeNode4;
+        TreeNode2.right = TreeNode5;
+        TreeNode3.left = TreeNode6;
+        TreeNode3.right = TreeNode7;
+        TreeNode4.left = new TreeNode(5);
+        ArrayList<Integer> longestPath = getLongestPath(TreeNode1, new ArrayList<Integer>());
+        System.out.println(longestPath);
+    }
+
+    public void checkTwoArraysFormsSameBST() {
+        int[] array1 = {2, 4, 1, 3};
+        int[] array2 = {2, 4, 3, 1};
+
+        System.out.println(checkTwoArraysFormsSameBSTUtil(array1, array2, 0, 0, Integer.MAX_VALUE, Integer.MIN_VALUE));
+    }
+
+    private boolean checkTwoArraysFormsSameBSTUtil(int[] array1, int[] array2, int i1, int i2, int maxValue, int minValue) {
+        int j, k;
+
+
+        for (j = i1; j < array1.length; j++) {
+            if (array1[j] > minValue && array1[j] < maxValue) {
+                break;
+            }
+        }
+
+        for (k = i2; k < array2.length; k++) {
+            if (array2[k] > minValue && array2[k] < maxValue) {
+                break;
+            }
+        }
+
+        if (j == array1.length && k == array1.length) {
+            return true;
+        }
+
+        if (j == array1.length || k == array1.length) {
+            return false;
+        }
+
+        if (array1[j] != array2[k]) {
+            return false;
+        }
+
+        return checkTwoArraysFormsSameBSTUtil(array1, array2, j + 1, k + 1, array1[j], minValue)
+                && checkTwoArraysFormsSameBSTUtil(array1, array2, j + 1, k + 1, maxValue, array1[j]);
+
+
+    }
+
+
+    private ArrayList<Integer> getLongestPath(TreeNode treeNode1, ArrayList<Integer> arrayList) {
+        if (treeNode1 == null) {
+            return arrayList;
+        }
+
+        ArrayList<Integer> arrayList1 = getLongestPath(treeNode1.left, (ArrayList<Integer>) arrayList.clone());
+        ArrayList<Integer> arrayList2 = getLongestPath(treeNode1.right, (ArrayList<Integer>) arrayList.clone());
+        ArrayList<Integer> arrayList3 = arrayList1.size() > arrayList2.size()
+                ? arrayList1
+                : arrayList2;
+        arrayList3.add(treeNode1.val);
+        return arrayList3;
+    }
+
+
+    public void diameter() {
+        TreeNode TreeNode1 = new TreeNode(10);
+        TreeNode TreeNode2 = new TreeNode(8);
+        TreeNode TreeNode3 = new TreeNode(12);
+        TreeNode TreeNode4 = new TreeNode(7);
+        TreeNode TreeNode5 = new TreeNode(9);
+        TreeNode TreeNode6 = new TreeNode(11);
+        TreeNode TreeNode7 = new TreeNode(13);
+
+        //TreeNode10.left = TreeNode1;
+        //TreeNode10.right = TreeNode2;
+        TreeNode1.left = TreeNode2;
+        TreeNode1.right = TreeNode3;
+        TreeNode2.left = TreeNode4;
+        TreeNode2.right = TreeNode5;
+        TreeNode3.left = TreeNode6;
+        TreeNode3.right = TreeNode7;
+        TreeNode4.left = new TreeNode(5);
+        System.out.println(getDiameter(TreeNode1, new Height()));
+    }
+
+    private int getDiameter(TreeNode treeNode1, Height diameter) {
+        if (treeNode1 == null) {
+            return 0;
+        }
+
+        Height leftHeight = new Height();
+        Height rightHeight = new Height();
+        int leftDiameter = getDiameter(treeNode1.left, leftHeight);
+        int rightDiameter = getDiameter(treeNode1.right, rightHeight);
+        diameter.height = Math.max(leftHeight.height, rightHeight.height) + 1;
+        return Math.max(leftHeight.height + rightHeight.height + 1, Math.max(leftDiameter, rightDiameter));
+    }
+
+
+class Height {
+    int height;
+}
+
+
+    public void nodeFromDistanceK() {
+        TreeNode TreeNode1 = new TreeNode(10);
+        TreeNode TreeNode2 = new TreeNode(8);
+        TreeNode TreeNode3 = new TreeNode(12);
+        TreeNode TreeNode4 = new TreeNode(7);
+        TreeNode TreeNode5 = new TreeNode(9);
+        TreeNode TreeNode6 = new TreeNode(11);
+        TreeNode TreeNode7 = new TreeNode(13);
+
+        //TreeNode10.left = TreeNode1;
+        //TreeNode10.right = TreeNode2;
+        TreeNode1.left = TreeNode2;
+        TreeNode1.right = TreeNode3;
+        TreeNode2.left = TreeNode4;
+        TreeNode2.right = TreeNode5;
+        TreeNode3.left = TreeNode6;
+        TreeNode3.right = TreeNode7;
+        TreeNode4.left = new TreeNode(5);
+        nodeFromDistanceKUtil(TreeNode1, TreeNode2, 2);
+    }
+
+    private int nodeFromDistanceKUtil(TreeNode treeNode1, TreeNode target, int k) {
+        if (treeNode1 == null) {
+            return -1;
+        }
+
+        if (target == treeNode1) {
+            printNodeKDistanceDown(target, k);
+            return 0;
+        }
+
+        int dl = nodeFromDistanceKUtil(treeNode1.left, target, k);
+        if (dl != -1) {
+            if (dl + 1 == k) {
+                System.out.println(treeNode1.val);
+            } else {
+                printNodeKDistanceDown(treeNode1.right, k - dl - 2);
+            }
+
+            return dl + 1;
+        }
+
+
+        int dr = nodeFromDistanceKUtil(treeNode1.right, target, k);
+
+        if (dr != -1) {
+            if (dr + 1 == k) {
+                System.out.println(treeNode1.val);
+            } else {
+                printNodeKDistanceDown(treeNode1.left, k - dr - 2);
+            }
+
+            return dr + 1;
+        }
+
+        return -1;
+    }
+
+    private void printNodeKDistanceDown(TreeNode target, int k) {
+        if (target == null) {
+            return;
+        }
+
+        if (k == 0) {
+            System.out.println(target.val);
+        }
+
+        printNodeKDistanceDown(target.left, k - 1);
+        printNodeKDistanceDown(target.right, k - 1);
+    }
+
+
+    public boolean isBinaryTree(TreeNode treeNode, int max, int min) {
+
+        if (treeNode == null) {
+            return true;
+        }
+
+
+        boolean isLeft = isBinaryTree(treeNode.left, treeNode.val, min);
+        boolean isRight = isBinaryTree(treeNode.right, max, treeNode.val);
+
+        if (treeNode.val >= max || treeNode.val <= min) {
+            return false;
+        }
+        return isLeft && isRight;
+
+    }
+
+    public void createBinaryTree(int[] parent) {
+        TreeNode[] createdNodes = new TreeNode[parent.length];
+        TreeNode head = new TreeNode(-1);
+        for (int i = 0; i < parent.length; i++) {
+            createBinaryTree(parent, createdNodes, head, i);
+        }
+
+        TreeNode.inorder(head.left);
+
+    }
+
+
+    private void createBinaryTree(int[] parent, TreeNode[] createdNodes, TreeNode head, int index) {
+        if (createdNodes[index] != null) {
+            return;
+        }
+
+        if (parent[index] == -1) {
+            createdNodes[index] = new TreeNode(index);
+            head.left = createdNodes[index];
+            return;
+        }
+
+
+        if (createdNodes[parent[index]] == null) {
+            createBinaryTree(parent, createdNodes, head, parent[index]);
+        }
+
+
+        TreeNode newTreeNode = new TreeNode(index);
+        TreeNode parentNode = createdNodes[parent[index]];
+        if (parentNode.left == null) {
+            parentNode.left = newTreeNode;
+        } else {
+            parentNode.right = newTreeNode;
+        }
+
+        createdNodes[index] = newTreeNode;
+    }
+
+    public int heightOfParentTreeRepresentation(int[] array) {
+        int[] depth = new int[array.length];
+        for (int i = 0; i < array.length; i++) {
+            getHeight(depth, array, i);
+        }
+
+        int height = 0;
+        for (int i = 0; i < depth.length; i++) {
+            height = Math.max(height, depth[i]);
+        }
+
+        return height;
+
+    }
+
+    private void getHeight(int[] depth, int[] array, int index) {
+        if (array[index] == -1) {
+            depth[index] = 1;
+        }
+        if (depth[index] != 0) {
+            return;
+        }
+
+
+        getHeight(depth, array, array[index]);
+
+        depth[index] = depth[array[index]] + 1;
+
+    }
+
+
+    public int findSum(TreeNode treeNode, int sum) {
+        if (treeNode.left == null && treeNode.right == null) {
+            return sum + treeNode.val;
+        }
+
+        int data = treeNode.val;
+        sum += data;
+        int left = findSum(treeNode.left, sum * 10);
+        int right = findSum(treeNode.right, sum * 10);
+        return left + right;
+    }
+
+
+    public void replaceTreeWithValueOfChildGreaterThanIt(TreeNode treeNode, Sum sum) {
+        if (treeNode == null) {
+            return;
+        }
+
+        replaceTreeWithValueOfChildGreaterThanIt(treeNode.right, sum);
+        sum.sum += treeNode.val;
+        treeNode.val = sum.sum;
+        replaceTreeWithValueOfChildGreaterThanIt(treeNode.left, sum);
+    }
+
+    public void extractLeaf(TreeNode treeNode, TreeNodePrevious treeNodePrevious) {
+        if (treeNode.left == null && treeNode.right == null) {
+            if (treeNodePrevious.head == null) {
+                treeNodePrevious.head = treeNode;
+                treeNodePrevious.previous = treeNode;
+                return;
+            }
+            treeNodePrevious.previous.right = treeNode;
+            treeNode.left = treeNodePrevious.previous;
+            treeNodePrevious.previous = treeNode;
+            return;
+
+        }
+
+
+        extractLeaf(treeNode.left, treeNodePrevious);
+        extractLeaf(treeNode.right, treeNodePrevious);
+    }
+
+    /*public void connect(TreeLinkNode root) {
+        TreeLinkNode current = root;
+        TreeLinkNode previous = null;
+        TreeLinkNode leftWall = null;
+        while (current != null) {
+            while (current != null) {
+                if (current.left != null) {
+                    if (previous == null) {
+                        leftWall = current.left;
+                    } else {
+                        previous.next = current.left;
+                    }
+
+                    previous = current.left;
+                }
+
+                if (current.right != null) {
+                    if (previous == null) {
+                        leftWall = current.right;
+                    } else {
+                        previous.next = current.right;
+                    }
+
+                    previous = current.right;
+                }
+
+                current = current.next;
+            }
+            current = leftWall;
+            previous = null;
+            leftWall = null;
+
+        }
+        return;
+    }*/
+
+
+    public List<String> addOperators(String num, int target) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        String operator = "+-*";
+        char[] chars = new char[2 * num.length()];
+        addOperators(num, 0, target, arrayList, 0, operator, chars, 0);
+        return arrayList;
+    }
+
+    private void addOperators(String num, int l, int target, ArrayList<String> arrayList, int currentSum, String operators, char[] chars, int index) {
+        if (l == num.length() - 1) {
+            chars[index] = num.charAt(l);
+            currentSum = toOperators(currentSum, chars[index - 1], chars[index]);
+            if (currentSum == target) {
+                arrayList.add(String.valueOf(chars));
+            }
+            return;
+        }
+
+        chars[index] = num.charAt(l);
+        for (int j = 0; j < operators.length(); j++) {
+            if (j == 2 && l == 0) {
+                currentSum = 1;
+            }
+
+            chars[index + 1] = operators.charAt(j);
+            currentSum = toOperators(currentSum, operators.charAt(j), chars[index]);
+            addOperators(num, l + 1, target, arrayList, currentSum, operators, chars, index + 2);
+        }
+    }
+
+    public int toOperators(int currentSum, char operator, char operandA) {
+        switch (operator) {
+            case '+':
+                return Integer.parseInt(String.valueOf(operandA)) + currentSum;
+            case '-':
+                return currentSum - Integer.parseInt(String.valueOf(operandA));
+            case '*':
+                return Integer.parseInt(String.valueOf(operandA)) * currentSum;
+        }
+
+        return -1;
+    }
+
+    public void moveZeroes(int[] nums) {
+
+        int index = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                nums[index++] = nums[i];
+            }
+        }
+
+        for (int i = index; i < nums.length; i++) {
+            nums[i] = 0;
+        }
+
+        return;
+    }
+
+    public int findDuplicate(int[] nums) {
+        int n = nums.length - 1;
+        int left = 0, right = n;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            int count = numBelow(nums, mid);
+            if (count > mid) right = mid;
+            else left = mid + 1;
+        }
+        return left;
+    }
+
+    public int numBelow(int[] nums, int target) {
+        int result = 0;
+        for (int i = 0; i < nums.length; i++)
+            if (nums[i] <= target) result++;
+        return result;
+    }
+
+    public ArrayList<Integer> order(ArrayList<Integer> heights, ArrayList<Integer> infronts) {
+        if (heights.size() != infronts.size()) {
+            return null;
+        }
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < heights.size(); i++) {
+            map.put(heights.get(i), infronts.get(i));
+        }
+
+        infronts = new ArrayList<>();
+        Collections.sort(heights, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1 > o2
+                        ? -1
+                        : 0;
+            }
+        });
+        for (int i = 0; i < heights.size(); i++) {
+            infronts.add(map.get(heights.get(i)));
+        }
+
+        RopeDs ropeDs = new RopeDs(heights.get(0), infronts.get(0) + 1);
+        for (int i = 1; i < heights.size(); i++) {
+            insert(ropeDs, heights.get(i), infronts.get(i));
+        }
+
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        toInorder(arrayList, ropeDs);
+        return arrayList;
+    }
+
+    private void insert(RopeDs ropeDs, Integer rootValue, Integer rankValue) {
+        RopeDs previous = null;
+        int rankvalueBackup = rankValue;
+        while (ropeDs != null) {
+            previous = ropeDs;
+            rankvalueBackup = rankValue;
+            if (ropeDs.leftNodeCount > rankValue) {
+                ropeDs.leftNodeCount++;
+                ropeDs = ropeDs.left;
+            } else {
+                rankValue = rankValue - ropeDs.leftNodeCount;
+                ropeDs = ropeDs.right;
+            }
+        }
+
+        if (previous.leftNodeCount <= rankvalueBackup) {
+            previous.right = new RopeDs(rootValue, rankValue + 1);
+        } else {
+            previous.left = new RopeDs(rootValue, rankValue + 1);
+        }
+
+    }
+
+    public void connect1(TreeLinkNode root) {
 
         TreeLinkNode previous = null;
         TreeLinkNode current = root;
@@ -209,21 +1234,24 @@ public class Solution {
     }
 
     public int sumNumbers(TreeNode a) {
+        a = new TreeNode(1);
+        a.right = new TreeNode(2);
+        System.out.println(sumNumbers(a, 0));
         return sumNumbers(a, 0);
     }
 
     private int sumNumbers(TreeNode a, int sum) {
         if (a == null) {
-            return 0;
+            return sum / 10;
         }
-        if (a.left == null && a.right == null) {
+        /*if (a.left == null && a.right == null) {
             sum += a.val;
             sum = sum % 1003;
             return sum;
-        }
+        }*/
 
-        return sumNumbers(a.left, ((sum + a.val) * 10) % 1003) +
-                sumNumbers(a.right, ((sum + a.val) * 10) % 1003);
+        return sumNumbers(a.left, (sum * 10) % 1003) + a.val +
+                sumNumbers(a.right, (sum * 10) % 1003);
     }
 
     private void sumNumbers(TreeNode a, ArrayList<Integer> arrayList, int sum) {
@@ -338,15 +1366,25 @@ public class Solution {
 
     }
 
-    public TreeNode invertTree(TreeNode root) {
+
+    public void invertTree() {
+        TreeNode treeNode = getTreeNode();
+        TreeNode.inorder(treeNode);
+        invertTree(treeNode);
+        System.out.println();
+        TreeNode.inorder(treeNode);
+    }
+
+    public void invertTree(TreeNode root) {
         if (root == null) {
-            return null;
+            return;
         }
 
-        TreeNode temp = invertTree(root.right);
-        root.right = invertTree(root.left);
+        TreeNode temp = root.right;
+        root.right = root.left;
         root.left = temp;
-        return root;
+        invertTree(root.left);
+        invertTree(root.right);
     }
 
     public Solution() {
@@ -450,6 +1488,16 @@ public class Solution {
         toInorder(arrayList, a.right);
     }
 
+    private static void toInorder(ArrayList<Integer> arrayList, RopeDs a) {
+        if (a == null) {
+            return;
+        }
+
+        toInorder(arrayList, a.left);
+        arrayList.add(a.data);
+        toInorder(arrayList, a.right);
+    }
+
     /*public static int kthsmallest(TreeNode root, int k) {
         return kthsmallest(root, k, new Count());
     }*/
@@ -472,12 +1520,12 @@ public class Solution {
                 ? rightValue
                 : leftValue;
     }*/
-   /* public static TreeNode buildTree(ArrayList<Integer> inorder, ArrayList<Integer> postorder){
+   /* public static TreeNode buildTree(arraylist<Integer> inorder, arraylist<Integer> postorder){
         return buildTree(postorder,inorder,0, inorder.size() - 1, new Count(inorder.size()));
     }*/
 
 /*
-    public static TreeNode buildTree(ArrayList<Integer> postorder, ArrayList<Integer> inorder, int low, int high, Count count) {
+    public static TreeNode buildTree(arraylist<Integer> postorder, arraylist<Integer> inorder, int low, int high, Count count) {
         if (low > high || postorder.isEmpty()) {
             return null;
         }
@@ -667,12 +1715,25 @@ class Count {
     boolean treeNode2Found;
 }
 
-class TreeNodeWithLevel {
-    TreeLinkNode treeLinkNode;
-    int level;
+class RopeDs {
+    int data;
+    int leftNodeCount;
 
-    public TreeNodeWithLevel(TreeLinkNode treeLinkNode, int level) {
-        this.treeLinkNode = treeLinkNode;
-        this.level = level;
+    RopeDs left;
+    RopeDs right;
+
+    public RopeDs(int data, int leftNodeCount) {
+        this.data = data;
+        this.leftNodeCount = leftNodeCount;
     }
+}
+
+class TreeNodePrevious {
+    TreeNode previous;
+    TreeNode head;
+}
+
+
+class Sum {
+    int sum;
 }

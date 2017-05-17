@@ -14,8 +14,23 @@ public class ListNode {
 
     public static void print(ListNode singleLinkedList){
         while (singleLinkedList  != null){
-            System.out.println(singleLinkedList.val);
+            System.out.print(singleLinkedList.val + " ");
             singleLinkedList = singleLinkedList.next;
         }
+        System.out.println();
+    }
+
+    public static ListNode toListNode(int[] array){
+        ListNode head = null, current = null;
+        for (int i = 0; i < array.length; i++) {
+            ListNode currentListNode = new ListNode(array[i]);
+            if (head == null){
+                head = current = currentListNode;
+            }else {
+                current.next = currentListNode;
+                current = currentListNode;
+            }
+        }
+        return head;
     }
 }

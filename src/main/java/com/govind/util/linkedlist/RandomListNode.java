@@ -9,4 +9,12 @@ public class RandomListNode {
         this.label = x;
 
     }
+
+    public static void print(RandomListNode singleLinkedList){
+        while (singleLinkedList  != null){
+            System.out.print(singleLinkedList.label + " " + singleLinkedList.random.label+" -> ");
+            singleLinkedList = singleLinkedList.next;
+        }
+        System.out.println();
+    }
 }
